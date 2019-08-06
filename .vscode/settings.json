@@ -3,5 +3,6 @@
         "activityBar.background": "#5c0404",
         "titleBar.activeBackground": "#5c0404",
         "titleBar.activeForeground": "#FEFBFF"
-    }
+    },
+    "python.pythonPath": "C:\\ProgramData\\Miniconda3\\envs\\UAV\\python.exe"
 }
