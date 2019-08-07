@@ -8,7 +8,7 @@ Some path schedule solutions specifically for UAV-sensorTime-sensitive Network. 
  
 * length_range: The range of map's length and width.
 * priority_range: The range of possible sensors' priority.
-* s: ![](http://latex.codecogs.com/gif.latex?\\\sqrt{{(r + R)}^2 - h^2})
+* s: ![]([http://latex.codecogs.com/gif.latex?\\\sqrt{{(r + R)}^2 - h^2}](https://latex.codecogs.com/gif.latex?\sqrt{{(r&space;&plus;&space;R)}^2&space;-&space;h^2}))
 * v: The speed of UAV.
 * period: One period named `t` in the paper.
 * t_limit: The working-time limitation which is caused by fuel.
