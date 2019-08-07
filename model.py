@@ -27,10 +27,12 @@ def get_max_time():
 
 time = datetime.datetime.now()
 
+# Parameters. Please change these number in order to generate different results.
 length_range = 1000.0
 priority_range = 4
+sensors_amount = 10
 s = 100.0
-v = 10
+v = 13.4
 period = 300
 t_limit = 300
 max_time = get_max_time() * period
@@ -100,6 +102,12 @@ class UAV:
             return t
 
     def back(self):
+        """fly back to (0, 0) in order to get fuel
+        Model the cost for UAV flying back to original station.
+
+        Returns:
+            t: The time costed
+        """
         distance = np.sqrt((self.x - 0)**2 + (self.y - 0)**2)
         t = distance / v
         self.x = 0
@@ -206,9 +214,14 @@ def draw(uav, sensors):
 
 
 def greedy():
+    """Greedy Algorithm
+    A greedy algorithm is an algorithmic paradigm that follows the problem 
+    solving heuristic of making the locally optimal choice at each stage with the 
+    intent of finding a global optimum. 
+    """
     sensors = []
     np.random.seed(seed)
-    for _ in range(10):
+    for _ in range(sensors_amount):
         sensor = Sensor(length_range, priority_range,
                         seed=np.random.randint(0, 10))
         sensors.append(sensor)
