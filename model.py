@@ -1,14 +1,15 @@
-import numpy as np
-import matplotlib.pyplot as plt
-from matplotlib.patches import Circle
-import json
 import datetime
+import json
+import os
+
+import matplotlib.pyplot as plt
+import numpy as np
+from matplotlib.patches import Circle
 
 
 def get_max_time():
-    L = list(range(1, priority_range + 1))
-    b = [i for i in L]
-    length = len(L)
+    l = list(range(1, priority_range + 1))
+    b = [i for i in l]
 
     def all_equal(l):
         start = l[0]
@@ -17,13 +18,16 @@ def get_max_time():
                 return False
         return True
 
-    while not all_equal(L):
-        min_num = min(L)
-        for index, item in enumerate(L):
+    while not all_equal(l):
+        min_num = min(l)
+        for index, item in enumerate(l):
             if item == min_num:
-                L[index] += b[index]
-    return L[0]
+                l[index] += b[index]
+    return l[0]
 
+
+if not os.path.exists('./out'):
+    os.makedirs('./out')
 
 time = datetime.datetime.now()
 
@@ -42,10 +46,11 @@ seed = 5
 print('Environment:')
 print('  length_range:\t\t', length_range)
 print('  priority_range:\t', priority_range)
+print('  sensors_amount:\t', sensors_amount)
 print('  s:\t\t\t', s)
 print('  v:\t\t\t', v)
 print('  period:\t\t', period)
-print('  t_limit:\t\t', period)
+print('  t_limit:\t\t', t_limit)
 print('  max_time:\t\t', max_time)
 print('  Random seed:\t\t', seed)
 print('Result:')
@@ -80,7 +85,7 @@ class UAV:
             t = distance / v
 
         if self.records[-1][0] + t > max_time:
-            return None
+            return False
         else:
             if distance != 0.0:
                 temp_x, temp_y = self.x + (sensor.x - self.x) * \
@@ -147,7 +152,7 @@ def cost(uav, sensors, output=False):
         epsilon = max_time / (period * sensor.p) + 1 - len(epsilon)
         cost += epsilon * 1 / sensor.p
         if output:
-            console = {}
+            console = dict()
             console['x'] = sensor.x
             console['y'] = sensor.y
             console['p'] = sensor.p
@@ -227,20 +232,18 @@ def greedy():
         sensors.append(sensor)
 
     uav = UAV()
-    t = 0.0
-    while True:
-        try:
-            c = float('inf')
-            for sensor in sensors:
-                temp_uav = uav
-                t += temp_uav.fly_to(sensor)
-                temp_c = cost(temp_uav, sensors)
-                if temp_c < c:
-                    c = temp_c
-                    result_uav = temp_uav
-            uav = result_uav
-        except:
-            break
+    running = 1
+    while running:
+        c = float('inf')
+        result_uav = uav
+        for sensor in sensors:
+            temp_uav = uav
+            running = temp_uav.fly_to(sensor)
+            temp_c = cost(temp_uav, sensors)
+            if temp_c < c:
+                c = temp_c
+                result_uav = temp_uav
+        uav = result_uav
 
     cost(uav, sensors, output=True)
     draw(uav, sensors)
