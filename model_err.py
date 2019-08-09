@@ -72,10 +72,10 @@ class UAV:
         else:
             self.x = copy.x
             self.y = copy.y
-            self.records = copy.records[:]
+            self.records = copy.records
             self.t_limit = copy.t_limit
 
-    def fly_to(self, sensor, move=False):
+    def fly_to(self, sensor):
         """fly to to specific sensor
         Model the cost for UAV flying to a specific sensor.
 
@@ -108,8 +108,7 @@ class UAV:
                 self.x, self.y = temp_x, temp_y
 
             self.records.append((self.records[-1][0] + t, (self.x, self.y)))
-            if move:
-                sensor.records.append(self.records[-1][0] + t)
+            sensor.records.append(self.records[-1][0] + t)
 
             self.t_limit -= t
 
@@ -292,18 +291,18 @@ def greedy(sensors, uav):
     intent of finding a global optimum. 
     """
     running = True
-    target_sensor = None
     while running:
         c = float('inf')
+        result_uav = UAV(uav)
         for sensor in sensors:
             temp_uav = UAV(uav)
             running = temp_uav.fly_to(sensor)
             temp_c = cost(temp_uav, sensors)
             if temp_c <= c:
                 c = temp_c
-                target_sensor = sensor
-        uav.fly_to(target_sensor, move=True)
-        del(temp_uav)
+                result_uav = UAV(temp_uav)
+        uav = UAV(result_uav)
+        del(temp_uav, result_uav)
 
     cost(uav, sensors, output=True)
     draw(uav, sensors, details=True)
