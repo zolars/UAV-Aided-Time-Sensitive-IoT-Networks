@@ -43,7 +43,7 @@ period = 300
 t_limit = 450
 max_time = get_max_time() * period
 
-seed = 5
+seed = 50
 
 print('Environment:')
 print('  length_range:\t\t', length_range)
@@ -199,29 +199,28 @@ def cost(uav, sensors, output=False):
 def draw(uav, sensors, details=False):
     plt.style.use('classic')
 
-    fig = plt.figure('UAV', facecolor='lightgray', dpi=100)
+    fig = plt.figure(0, facecolor='lightgray', dpi=100)
     ax = fig.add_subplot(111)
 
-    if not details:
-        plt.axis('equal')
-        plt.plot([0, 0], [0, length_range], c='#000000')
-        plt.plot([0, length_range], [0, 0], c='#000000')
-        plt.plot([length_range, length_range], [0, length_range], c='#000000')
-        plt.plot([0, length_range], [length_range, length_range], c='#000000')
+    plt.axis('equal')
+    ax.plot([0, 0], [0, length_range], c='#000000')
+    ax.plot([0, length_range], [0, 0], c='#000000')
+    ax.plot([length_range, length_range], [0, length_range], c='#000000')
+    ax.plot([0, length_range], [length_range, length_range], c='#000000')
 
-        patches = []
-        colors = []
-        for sensor in sensors:
-            circle = Circle(xy=(sensor.x, sensor.y),
-                            radius=s)
-            patches.append(circle)
-            colors.append(1 / priority_range * sensor.p * 100)
-            ax.scatter(sensor.x, sensor.y, c='b', marker='^')
+    patches = []
+    colors = []
+    for sensor in sensors:
+        circle = Circle(xy=(sensor.x, sensor.y),
+                        radius=s)
+        patches.append(circle)
+        colors.append(1 / priority_range * sensor.p * 100)
+        ax.scatter(sensor.x, sensor.y, c='b', marker='^')
 
-        p = PatchCollection(patches, cmap=cm.YlOrRd, alpha=0.4)
-        ax.add_collection(p)
-        p.set_array(np.array(colors))
-        plt.colorbar(p)
+    p = PatchCollection(patches, cmap=cm.YlOrRd, alpha=0.4)
+    ax.add_collection(p)
+    p.set_array(np.array(colors))
+    plt.colorbar(p)
 
     previous_x, previous_y = 0, 0
     tour = 0
@@ -267,7 +266,10 @@ def draw(uav, sensors, details=False):
 
         previous_x, previous_y = current_x, current_y
 
-    if not details:
+    if details:
+        fig.savefig(
+            './out/{:%m-%d-%H-%M-%S}_{}.png'.format(time, tour))
+    else:
         fig.savefig('./out/{:%m-%d-%H-%M-%S}.png'.format(time))
         plt.show()
 
@@ -282,34 +284,6 @@ def generateMap():
 
     uav = UAV()
     return sensors, uav
-
-
-def greedy_err(sensors, uav):
-    running, target_sensor = True, None
-    while running:
-        c = float('inf')
-        for sensor in sensors:
-            temp_uav = UAV(uav)
-            running = temp_uav.fly_to(sensor)
-            temp_c = cost(temp_uav, sensors)
-            print('Index:', sensors.index(sensor), '\tcost: ', temp_c)
-
-            if len(sensor.records) > 0:
-                sensor.records.pop()
-
-            if temp_c <= c:
-                c = temp_c
-                target_sensor = sensor
-        uav.fly_to(target_sensor)
-        del(temp_uav)
-
-    cost(uav, sensors, output=True)
-    draw(uav, sensors, details=True)
-    draw(uav, sensors, details=False)
-
-
-def genetic(sensors, uav):
-    pass
 
 
 def greedy(sensors, uav):
@@ -344,6 +318,10 @@ def test(sensors, uav):
     uav.fly_to(sensors[1])
     draw(uav, sensors)
     cost(uav, sensors, output=True)
+
+
+def genetic(sensors, uav):
+    pass
 
 
 if __name__ == "__main__":
