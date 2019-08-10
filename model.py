@@ -2,8 +2,8 @@ import datetime
 import json
 import os
 
-import matplotlib.pyplot as plt
 from matplotlib import cm
+from matplotlib import pyplot as plt
 from matplotlib.patches import Circle
 from matplotlib.collections import PatchCollection
 import numpy as np
@@ -38,9 +38,9 @@ length_range = 1000.0
 priority_range = 4
 sensors_amount = 10
 s = 100.0
-v = 8
+v = 10
 period = 300
-t_limit = 300
+t_limit = 450
 max_time = get_max_time() * period
 
 seed = 5
@@ -75,7 +75,7 @@ class UAV:
             self.records = copy.records[:]
             self.t_limit = copy.t_limit
 
-    def fly_to(self, sensor, move=False):
+    def fly_to(self, sensor):
         """fly to to specific sensor
         Model the cost for UAV flying to a specific sensor.
 
@@ -88,7 +88,7 @@ class UAV:
         distance = np.sqrt((self.x - sensor.x)**2 + (self.y - sensor.y)**2) - s
         distance = distance if distance > 0.01 else 0.0
         if distance == 0:
-            t = period - self.records[-1][0] % period
+            t = period - self.records[-1][0] % period - 1
         else:
             t = distance / v
 
@@ -108,8 +108,7 @@ class UAV:
                 self.x, self.y = temp_x, temp_y
 
             self.records.append((self.records[-1][0] + t, (self.x, self.y)))
-            if move:
-                sensor.records.append(self.records[-1][0] + t)
+            sensor.records.append(self.records[-1][0])
 
             self.t_limit -= t
 
@@ -142,7 +141,7 @@ class Sensor:
     def __init__(self, length_range, priority_range, seed=None):
         self.x = np.random.randint(0, length_range)
         self.y = np.random.randint(0, length_range)
-        self.p = np.random.randint(1, priority_range)
+        self.p = np.random.randint(1, priority_range + 1)
         self.records = []
 
     def gen(self):
@@ -158,10 +157,10 @@ def cost(uav, sensors, output=False):
         epsilon = set()
         for record in sensor.records:
             epsilon.add(record // (period * sensor.p))
-        epsilon = max_time / (period * sensor.p) + 1 - len(epsilon)
+        epsilon = max_time / (period * sensor.p) - len(epsilon)
 
         if epsilon != 0:
-            cost += 1 / sensor.p
+            cost += epsilon / sensor.p
         if output:
             console = dict()
             console['x'] = sensor.x
@@ -270,7 +269,7 @@ def draw(uav, sensors, details=False):
 
     if not details:
         fig.savefig('./out/{:%m-%d-%H-%M-%S}.png'.format(time))
-        fig.show()
+        plt.show()
 
 
 def generateMap():
@@ -285,24 +284,23 @@ def generateMap():
     return sensors, uav
 
 
-def greedy(sensors, uav):
-    """Greedy Algorithm
-    A greedy algorithm is an algorithmic paradigm that follows the problem 
-    solving heuristic of making the locally optimal choice at each stage with the 
-    intent of finding a global optimum. 
-    """
-    running = True
-    target_sensor = None
+def greedy_err(sensors, uav):
+    running, target_sensor = True, None
     while running:
         c = float('inf')
         for sensor in sensors:
             temp_uav = UAV(uav)
             running = temp_uav.fly_to(sensor)
             temp_c = cost(temp_uav, sensors)
+            print('Index:', sensors.index(sensor), '\tcost: ', temp_c)
+
+            if len(sensor.records) > 0:
+                sensor.records.pop()
+
             if temp_c <= c:
                 c = temp_c
                 target_sensor = sensor
-        uav.fly_to(target_sensor, move=True)
+        uav.fly_to(target_sensor)
         del(temp_uav)
 
     cost(uav, sensors, output=True)
@@ -314,16 +312,41 @@ def genetic(sensors, uav):
     pass
 
 
+def greedy(sensors, uav):
+    """Greedy Algorithm
+    A greedy algorithm is an algorithmic paradigm that follows the problem
+    solving heuristic of making the locally optimal choice at each stage with the
+    intent of finding a global optimum.
+    """
+    running, target_sensor_id = True, None
+    while running:
+        c = float('inf')
+        for sensor in sensors:
+            temp_uav = UAV(uav)
+            running = temp_uav.fly_to(sensor)
+            if not running:
+                break
+            temp_c = cost(temp_uav, sensors)
+            sensor.records.pop()
+            if temp_c < c:
+                c = temp_c
+                target_sensor_id = sensors.index(sensor)
+
+        uav.fly_to(sensors[target_sensor_id])
+
+    cost(uav, sensors, output=True)
+    draw(uav, sensors, details=True)
+    draw(uav, sensors, details=False)
+
+
 def test(sensors, uav):
     uav.fly_to(sensors[1])
     uav.fly_to(sensors[1])
-    uav.fly_to(sensors[2])
-    uav.fly_to(sensors[1])
-
     draw(uav, sensors)
+    cost(uav, sensors, output=True)
 
 
 if __name__ == "__main__":
     sensors, uav = generateMap()
-    # test(sensors, uav)
     greedy(sensors, uav)
+    # test(sensors, uav)
