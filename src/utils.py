@@ -1,0 +1,146 @@
+from params import *
+from UAV import UAV
+from Sensor import Sensor
+
+import json
+import numpy as np
+from matplotlib import cm
+from matplotlib import pyplot as plt
+from matplotlib.patches import Circle
+from matplotlib.collections import PatchCollection
+
+
+def cost(uav, sensors, output=False):
+    sensors_result = []
+    cost = 0
+    for sensor in sensors:
+        epsilon = set()
+        for record in sensor.records:
+            epsilon.add(record // (period * sensor.p))
+        epsilon = max_time / (period * sensor.p) - len(epsilon)
+
+        if epsilon != 0:
+            cost += epsilon / sensor.p
+        if output:
+            console = dict()
+            console['x'] = sensor.x
+            console['y'] = sensor.y
+            console['p'] = sensor.p
+            console['epsilon'] = epsilon
+            console['cost'] = epsilon * 1 / sensor.p
+            console['records'] = sensor.records
+            sensors_result.append(console)
+            print(console)
+
+    if output:
+        result = {
+            'params': {
+                'length_range': length_range,
+                'priority_range': priority_range,
+                's': s,
+                'v': v,
+                'period': period,
+                't_limit': t_limit,
+                'max_time': max_time,
+                'seed': seed,
+            },
+            'cost': cost,
+            'uav_result': uav.records,
+            'sensors_result': sensors_result
+        }
+        with open('./out/{:%m-%d-%H-%M-%S}.json'.format(time), "w+") as f:
+            f.write(json.dumps(result))
+            f.close()
+        print('Total cost:', cost)
+
+    return cost
+
+
+def draw(uav, sensors, details=False):
+    plt.style.use('classic')
+
+    fig = plt.figure(0, facecolor='lightgray', dpi=100)
+    ax = fig.add_subplot(111)
+
+    plt.axis('equal')
+    ax.plot([0, 0], [0, length_range], c='#000000')
+    ax.plot([0, length_range], [0, 0], c='#000000')
+    ax.plot([length_range, length_range], [0, length_range], c='#000000')
+    ax.plot([0, length_range], [length_range, length_range], c='#000000')
+
+    patches = []
+    colors = []
+    for sensor in sensors:
+        circle = Circle(xy=(sensor.x, sensor.y),
+                        radius=s)
+        patches.append(circle)
+        colors.append(1 / priority_range * sensor.p * 100)
+        ax.scatter(sensor.x, sensor.y, c='b', marker='^')
+
+    p = PatchCollection(patches, cmap=cm.YlOrRd, alpha=0.4)
+    ax.add_collection(p)
+    p.set_array(np.array(colors))
+    plt.colorbar(p)
+
+    previous_x, previous_y = 0, 0
+    tour = 0
+    for record in uav.records:
+        current_x, current_y = record[1][0], record[1][1]
+        ax.scatter(current_x, current_y,
+                   c='C' + str(tour), alpha=1)
+        ax.annotate("", xy=(current_x, current_y), xytext=(previous_x, previous_y),
+                    arrowprops={
+            'arrowstyle': "->",
+            'color': 'C' + str(tour)
+        })
+        if (current_x, current_y) == (0.0, 0.0):
+            tour += 1
+            if details:
+                if tour > 1:
+                    fig.savefig(
+                        './out/{:%m-%d-%H-%M-%S}_{}.png'.format(time, tour - 1))
+                plt.close('all')
+                fig = plt.figure(tour, facecolor='lightgray', dpi=100)
+                ax = fig.add_subplot(111)
+                plt.axis('equal')
+                ax.plot([0, 0], [0, length_range], c='#000000')
+                ax.plot([0, length_range], [0, 0], c='#000000')
+                ax.plot([length_range, length_range], [
+                    0, length_range], c='#000000')
+                ax.plot([0, length_range], [
+                    length_range, length_range], c='#000000')
+
+                patches = []
+                colors = []
+                for sensor in sensors:
+                    circle = Circle(xy=(sensor.x, sensor.y),
+                                    radius=s)
+                    patches.append(circle)
+                    colors.append(1 / priority_range * sensor.p * 100)
+                    ax.scatter(sensor.x, sensor.y, c='b', marker='^')
+
+                p = PatchCollection(patches, cmap=cm.YlOrRd, alpha=0.4)
+                ax.add_collection(p)
+                p.set_array(np.array(colors))
+                plt.colorbar(p)
+
+        previous_x, previous_y = current_x, current_y
+
+    if details:
+        fig.savefig(
+            './out/{:%m-%d-%H-%M-%S}_{}.png'.format(time, tour))
+    else:
+        fig.savefig('./out/{:%m-%d-%H-%M-%S}.png'.format(time))
+        plt.show()
+
+
+def generateMap():
+    sensors = []
+    np.random.seed(seed)
+    for _ in range(sensors_amount):
+        sensor = Sensor(length_range, priority_range,
+                        seed=np.random.randint(0, 10))
+        sensors.append(sensor)
+
+    uav = UAV()
+    return sensors, uav

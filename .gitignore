@@ -1,5 +1,7 @@
+__pycache__
+.vscode
+.idea
+
 test
 documents
 out
-.vscode
-.idea
