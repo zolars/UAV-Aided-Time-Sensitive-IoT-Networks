@@ -1,4 +1,4 @@
-from params import *
+import params
 
 import numpy as np
 
@@ -13,7 +13,7 @@ class UAV:
             self.x = 0.0
             self.y = 0.0
             self.records = [(0.0, (0.0, 0.0))]
-            self.t_limit = t_limit
+            self.t_limit = params.t_limit
         else:
             self.x = copy.x
             self.y = copy.y
@@ -30,14 +30,15 @@ class UAV:
         Returns:
             t: The time costed
         """
-        distance = np.sqrt((self.x - sensor.x)**2 + (self.y - sensor.y)**2) - s
+        distance = np.sqrt((self.x - sensor.x)**2 +
+                           (self.y - sensor.y)**2) - params.s
         distance = distance if distance > 0.01 else 0.0
         if distance == 0:
-            t = period - self.records[-1][0] % period - 1
+            t = params.period - self.records[-1][0] % params.period - 1
         else:
-            t = distance / v
+            t = distance / params.v
 
-        if self.records[-1][0] + t > max_time:
+        if self.records[-1][0] + t > params.max_time:
             return False
         else:
             if distance != 0.0:
@@ -46,7 +47,7 @@ class UAV:
                     self.y + (sensor.y - self.y) * \
                     (distance / np.sqrt((self.x - sensor.x)**2 + (self.y - sensor.y)**2))
 
-                t_back = np.sqrt(temp_x**2 + temp_y**2) / v
+                t_back = np.sqrt(temp_x**2 + temp_y**2) / params.v
                 if self.t_limit - t - t_back < 0:
                     return self.back() + self.fly_to(sensor)
 
@@ -67,12 +68,12 @@ class UAV:
             t: The time costed
         """
         distance = np.sqrt((self.x - 0)**2 + (self.y - 0)**2)
-        t = distance / v
+        t = distance / params.v
         self.x = 0
         self.y = 0
         self.records.append(
             (self.records[-1][0] + t, (self.x, self.y)))
 
-        self.t_limit = t_limit
+        self.t_limit = params.t_limit
 
         return t

@@ -1,4 +1,3 @@
-from params import *
 from utils import draw, cost, generateMap
 
 from UAV import UAV
@@ -33,19 +32,6 @@ def greedy(sensors, uav):
 
 
 if __name__ == "__main__":
-    print('Environment:')
-    print('  length_range:\t\t', length_range)
-    print('  priority_range:\t', priority_range)
-    print('  sensors_amount:\t', sensors_amount)
-    print('  s:\t\t\t', s)
-    print('  v:\t\t\t', v)
-    print('  period:\t\t', period)
-    print('  t_limit:\t\t', t_limit)
-    print('  max_time:\t\t', max_time)
-    print('  Random seed:\t\t', seed)
-    print('Results:')
 
     sensors, uav = generateMap()
     greedy(sensors, uav)
-    # test(sensors, uav)
-    # genetic(sensors, uav)

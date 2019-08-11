@@ -36,4 +36,16 @@ period = 300
 t_limit = 450
 max_time = get_max_time() * period
 
-seed = 50
+seed = 5
+
+print('------------------Environment------------------')
+print('  length_range:\t\t', length_range)
+print('  priority_range:\t', priority_range)
+print('  sensors_amount:\t', sensors_amount)
+print('  s:\t\t\t', s)
+print('  v:\t\t\t', v)
+print('  period:\t\t', period)
+print('  t_limit:\t\t', t_limit)
+print('  max_time:\t\t', max_time)
+print('  Random seed:\t\t', seed)
+print('-----------------------------------------------')

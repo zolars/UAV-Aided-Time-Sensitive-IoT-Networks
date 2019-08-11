@@ -2,6 +2,7 @@ name: UAV
 dependencies:
   - python=3.7
   - numpy
-  - pip:
-    - matplotlib=3.1.1
+  - pandas
+  - matplotlib=3.1.1
+  - tqdm
   
