@@ -14,14 +14,14 @@ def greedy(sensors, uav):
     while running:
         c = float('inf')
         for sensor in sensors:
-            temp_uav = UAV(uav)
-            running = temp_uav.fly_to(sensor)
+            _uav = UAV(uav)
+            running = _uav.fly_to(sensor)
             if not running:
                 break
-            temp_c = cost(temp_uav, sensors)
+            _c = cost(_uav, sensors)
             sensor.records.pop()
-            if temp_c < c:
-                c = temp_c
+            if _c < c:
+                c = _c
                 target_sensor_id = sensors.index(sensor)
 
         uav.fly_to(sensors[target_sensor_id])

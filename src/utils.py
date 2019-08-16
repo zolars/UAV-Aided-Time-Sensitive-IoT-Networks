@@ -10,7 +10,7 @@ from matplotlib.patches import Circle
 from matplotlib.collections import PatchCollection
 
 
-def cost(uav, sensors, output=False):
+def cost(uav, sensors, details=False, output=False):
     sensors_result = []
     cost = 0
     for sensor in sensors:
@@ -21,7 +21,7 @@ def cost(uav, sensors, output=False):
 
         if epsilon != 0:
             cost += epsilon / sensor.p
-        if output:
+        if output or details:
             console = dict()
             console['x'] = sensor.x
             console['y'] = sensor.y
@@ -30,29 +30,32 @@ def cost(uav, sensors, output=False):
             console['cost'] = epsilon * 1 / sensor.p
             console['records'] = sensor.records
             sensors_result.append(console)
-            print(console)
+
+    result = {
+        'params': {
+            'length_range': params.length_range,
+            'priority_range': params.priority_range,
+            'sensors_amount': params.sensors_amount,
+            's': params.s,
+            'v': params.v,
+            'period': params.period,
+            't_limit': params.t_limit,
+            'max_time': params.max_time,
+            'seed': params.seed,
+        },
+        'cost': cost,
+        'uav_result': uav.records,
+        'sensors_result': sensors_result
+    }
 
     if output:
-        result = {
-            'params': {
-                'length_range': params.length_range,
-                'priority_range': params.priority_range,
-                'sensors_amount': params.sensors_amount,
-                's': params.s,
-                'v': params.v,
-                'period': params.period,
-                't_limit': params.t_limit,
-                'max_time': params.max_time,
-                'seed': params.seed,
-            },
-            'cost': cost,
-            'uav_result': uav.records,
-            'sensors_result': sensors_result
-        }
+
         with open('./out/{:%m-%d-%H-%M-%S}.json'.format(params.time), "w+") as f:
             f.write(json.dumps(result))
             f.close()
         print('Total cost:', cost)
+    if details:
+        return result
 
     return cost
 

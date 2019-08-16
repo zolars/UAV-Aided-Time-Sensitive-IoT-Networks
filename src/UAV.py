@@ -42,16 +42,16 @@ class UAV:
             return False
         else:
             if distance != 0.0:
-                temp_x, temp_y = self.x + (sensor.x - self.x) * \
+                _x, _y = self.x + (sensor.x - self.x) * \
                     (distance / np.sqrt((self.x - sensor.x)**2 + (self.y - sensor.y)**2)), \
                     self.y + (sensor.y - self.y) * \
                     (distance / np.sqrt((self.x - sensor.x)**2 + (self.y - sensor.y)**2))
 
-                t_back = np.sqrt(temp_x**2 + temp_y**2) / params.v
+                t_back = np.sqrt(_x**2 + _y**2) / params.v
                 if self.t_limit - t - t_back < 0:
                     return self.back() + self.fly_to(sensor)
 
-                self.x, self.y = temp_x, temp_y
+                self.x, self.y = _x, _y
 
             self.records.append((self.records[-1][0] + t, (self.x, self.y)))
             sensor.records.append(self.records[-1][0])
