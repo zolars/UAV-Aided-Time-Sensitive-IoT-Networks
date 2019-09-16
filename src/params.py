@@ -28,7 +28,7 @@ time = datetime.datetime.now()
 
 # Parameters. Please change these number in order to generate different results.
 length_range = 1000.0
-priority_range = 4
+priority_range = 8
 sensors_amount = 10
 s = 100.0
 v = 10

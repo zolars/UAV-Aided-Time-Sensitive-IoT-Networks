@@ -10,8 +10,17 @@ from matplotlib.patches import Circle
 from matplotlib.collections import PatchCollection
 
 
-def status(uav, sensors):
-    return False
+def observe(uav, sensors):
+    observation = []
+    for sensor in sensors:
+        if sensor.records == []:
+            observation.append(0)
+        else:
+            left_expire_time = params.period * sensor.p - (uav.records[-1][0] -
+                                                           sensor.records[-1])
+            left_expire_time = left_expire_time if left_expire_time > 0 else 0
+            observation.append(left_expire_time)
+    return np.array(observation)
 
 
 def cost(uav, sensors, details=False, output=False):

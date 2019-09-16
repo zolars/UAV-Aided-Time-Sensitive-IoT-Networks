@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 
-def QL(episode=100, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
+def run(episode=100, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
     RL = QTable(actions=list(range(params.sensors_amount)),
                 learning_rate=learning_rate,
                 reward_decay=reward_decay,
@@ -72,4 +72,4 @@ def QL(episode=100, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
 
 
 if __name__ == "__main__":
-    QL(episode=100, learning_rate=0.1, reward_decay=0.9, e_greedy=0.9)
+    run(episode=1000, learning_rate=0.1, reward_decay=0.9, e_greedy=0.9)
