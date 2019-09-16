@@ -7,7 +7,6 @@ class UAV:
     """UAV class
     Model UAV and provide functions used to locate it.
     """
-
     def __init__(self, copy=None):
         if copy is None:
             self.x = 0.0
@@ -71,8 +70,7 @@ class UAV:
         t = distance / params.v
         self.x = 0
         self.y = 0
-        self.records.append(
-            (self.records[-1][0] + t, (self.x, self.y)))
+        self.records.append((self.records[-1][0] + t, (self.x, self.y)))
 
         self.t_limit = params.t_limit
 

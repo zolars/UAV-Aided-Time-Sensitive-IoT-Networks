@@ -34,8 +34,9 @@ def QL(episode=100, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
             # RL take action and get next observation and reward
             done = uav.fly_to(sensors[action]) is False
             _cost = cost(uav, sensors)
-            _observation, reward = (
-                str(action) + '_' + str(uav.records[-1][0] // params.period)), (previous_cost - _cost) * 100
+            _observation, reward = (str(action) + '_' +
+                                    str(uav.records[-1][0] // params.period)
+                                    ), (previous_cost - _cost) * 100
             previous_cost = _cost
 
             # RL learn from this transition
@@ -71,7 +72,4 @@ def QL(episode=100, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
 
 
 if __name__ == "__main__":
-    QL(episode=100,
-       learning_rate=0.1,
-       reward_decay=0.9,
-       e_greedy=0.9)
+    QL(episode=100, learning_rate=0.1, reward_decay=0.9, e_greedy=0.9)

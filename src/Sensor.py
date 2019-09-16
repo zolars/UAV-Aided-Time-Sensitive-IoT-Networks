@@ -7,7 +7,6 @@ class Sensor:
     """Sensor class
     Model sensors and provide functions used to locate them.
     """
-
     def __init__(self):
         self.x = np.random.randint(0, params.length_range)
         self.y = np.random.randint(0, params.length_range)
