@@ -10,6 +10,10 @@ from matplotlib.patches import Circle
 from matplotlib.collections import PatchCollection
 
 
+def status(uav, sensors):
+    return False
+
+
 def cost(uav, sensors, details=False, output=False):
     sensors_result = []
     cost = 0

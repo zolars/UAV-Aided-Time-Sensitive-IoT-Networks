@@ -32,6 +32,5 @@ def greedy(sensors, uav):
 
 
 if __name__ == "__main__":
-
     sensors, uav = generateMap()
     greedy(sensors, uav)

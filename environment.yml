@@ -6,6 +6,7 @@ dependencies:
   - numpy
   - pandas
   - tqdm
+  - pytorch
   - pip:
-    - tensorflow==1.13.1
-    - gym==0.8.0
+    - gym[all]
+    - pillow
