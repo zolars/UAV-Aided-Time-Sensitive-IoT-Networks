@@ -28,13 +28,13 @@ time = datetime.datetime.now()
 
 # Parameters. Please change these number in order to generate different results.
 length_range = 1000.0
-priority_range = 8
+priority_range = 6
 sensors_amount = 10
 s = 100.0
-v = 10
+v = 5
 period = 300
 t_limit = 450
-max_time = get_max_time() * period * 2
+max_time = get_max_time() * period * 20
 
 seed = 5
 

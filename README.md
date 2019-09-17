@@ -4,8 +4,12 @@
 
 Some path schedule solutions specifically for UAV-sensorTime-sensitive Network. The code is used to evaluate the models' performance and time complexity.
 
+<img src='./archive/DQN/09-16-22-29-15_cost.png'>
+
+<img src='./archive/DQN/09-16-22-29-15_DN.png'>
+
 ## Parameters
- 
+
 * length_range: The range of map's length and width.
 * priority_range: The range of possible sensors' priority.
 * s: ![s](https://latex.codecogs.com/gif.latex?\sqrt{{(r&space;&plus;&space;R)}^2&space;-&space;h^2})

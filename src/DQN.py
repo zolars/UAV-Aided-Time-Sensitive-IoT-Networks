@@ -84,4 +84,4 @@ def run(episode=100):
 
 
 if __name__ == "__main__":
-    run(episode=2000)
+    run(episode=1000)
