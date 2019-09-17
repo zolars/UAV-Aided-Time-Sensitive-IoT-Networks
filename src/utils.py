@@ -62,7 +62,6 @@ def cost(uav, sensors, details=False, output=False):
     }
 
     if output:
-
         with open('./out/{:%m-%d-%H-%M-%S}.json'.format(params.time),
                   "w+") as f:
             f.write(json.dumps(result))
