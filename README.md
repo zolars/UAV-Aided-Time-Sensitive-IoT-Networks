@@ -41,7 +41,9 @@ Some path schedule solutions specifically for UAV-sensorTime-sensitive Network. 
 
 3. Run Python script. The results save at `./out/`
     ```
-    (UAV) $ python model.py
+    (UAV) $ python greedy.py
+    (UAV) $ python QL.py
+    (UAV) $ python DQN.py
     ```
 
 4. If you wanna remove conda environment:
