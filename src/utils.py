@@ -40,7 +40,10 @@ def cost(uav, sensors, details=False, output=False):
             console['y'] = sensor.y
             console['p'] = sensor.p
             console['epsilon'] = epsilon
-            console['cost'] = 1 / sensor.p
+            if epsilon != 0:
+                console['cost'] = 1 / sensor.p
+            else:
+                console['cost'] = 0
             console['records'] = sensor.records
             sensors_result.append(console)
 

@@ -33,7 +33,7 @@ sensors_amount = 0
 s = 100.0
 v = 10
 period = 300
-t_limit = 300
+t_limit = 450
 max_time = get_max_time() * period * 2
 
 seed = 5
