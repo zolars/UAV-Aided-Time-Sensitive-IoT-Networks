@@ -20,6 +20,7 @@ class DeepQNetwork:
             e_greedy_increment=None,
             output_graph=False,
     ):
+        tf.reset_default_graph()
         self.n_actions = n_actions
         self.n_features = n_features
         self.lr = learning_rate

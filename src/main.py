@@ -4,12 +4,32 @@ import QL
 import DQN
 
 import json
+import datetime
 
-result = {}
-result['greedy'] = greedy.run()
-result['QL'] = QL.run()
-result['DQN'] = DQN.run()
+cost = []
+for _ in range(10):
+    params.sensors_amount += 5
 
-with open('./out/{:%m-%d-%H-%M-%S}.json'.format(params.time), "w+") as f:
-    f.write(json.dumps(result))
+    result = {}
+    result['greedy'] = greedy.run()
+    result['QL'] = QL.run(episode=100)
+    result['DQN'] = DQN.run(episode=100)
+
+    cost.append({
+        'greedy': result['greedy']['cost'],
+        'QL': result['QL']['cost'],
+        'DQN': result['DQN']['cost']
+    })
+
+    with open('./out/{:%m-%d-%H-%M-%S}.json'.format(datetime.datetime.now()),
+              "w+") as f:
+        f.write(json.dumps(result))
+        f.close()
+
+with open(
+        './out/sensors_amount_{:%m-%d-%H-%M-%S}.json'.format(
+            datetime.datetime.now()), "w+") as f:
+    f.write(json.dumps(cost))
     f.close()
+
+print(cost)

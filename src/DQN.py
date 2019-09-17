@@ -11,8 +11,8 @@ import matplotlib.pyplot as plt
 from tqdm import tqdm
 
 
-def run(episode=100,
-        learning_rate=0.1,
+def run(episode,
+        learning_rate=0.01,
         reward_decay=0.9,
         e_greedy=0.9,
         replace_target_iter=200,
@@ -102,12 +102,12 @@ def run(episode=100,
 
     # draw(best_uav, sensors, details=True)
     # draw(best_uav, sensors, details=False)
-
+    del (RL)
     return best_result
 
 
 if __name__ == "__main__":
-    best_result = run(episode=1000)
+    best_result = run(episode=100)
     with open('./out/DQN_{:%m-%d-%H-%M-%S}.json'.format(params.time),
               "w+") as f:
         f.write(json.dumps(best_result))

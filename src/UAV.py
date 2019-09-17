@@ -33,7 +33,7 @@ class UAV:
                            (self.y - sensor.y)**2) - params.s
         distance = distance if distance > 0.01 else 0.0
         if distance == 0:
-            t = params.period - self.records[-1][0] % params.period - 1
+            t = params.period - self.records[-1][0] % params.period + 1
         else:
             t = distance / params.v
 

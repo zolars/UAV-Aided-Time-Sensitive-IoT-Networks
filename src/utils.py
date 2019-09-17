@@ -33,14 +33,14 @@ def cost(uav, sensors, details=False, output=False):
         epsilon = params.max_time / (params.period * sensor.p) - len(epsilon)
 
         if epsilon != 0:
-            cost += epsilon / sensor.p
+            cost += 1 / sensor.p
         if output or details:
             console = dict()
             console['x'] = sensor.x
             console['y'] = sensor.y
             console['p'] = sensor.p
             console['epsilon'] = epsilon
-            console['cost'] = epsilon * 1 / sensor.p
+            console['cost'] = 1 / sensor.p
             console['records'] = sensor.records
             sensors_result.append(console)
 
