@@ -73,6 +73,7 @@ def run(episode, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
                     best_cost = _cost
                     best_uav = UAV(uav)
                 break
+        del uav
 
     # output results
     print('Max time', params.max_time, 'Final time:', best_uav.records[-1][0])
@@ -80,12 +81,12 @@ def run(episode, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
 
     # print('Q_table:\n', RL.q_table)
 
-    # x, y = list(range(episode)), costs
-    # plt.plot(x, y, color='red')
-    # plt.show()
+    x, y = list(range(episode)), costs
+    plt.plot(x, y, color='red')
+    plt.show()
 
     # draw(best_uav, sensors, details=True)
-    # draw(best_uav, sensors, details=False)
+    draw(best_uav, sensors, details=False)
 
     del (RL)
 
@@ -93,7 +94,7 @@ def run(episode, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
 
 
 if __name__ == "__main__":
-    best_result = run(episode=1000)
+    best_result = run(episode=100)
     with open('./out/QL_{:%m-%d-%H-%M-%S}.json'.format(params.time),
               "w+") as f:
         f.write(json.dumps(best_result))

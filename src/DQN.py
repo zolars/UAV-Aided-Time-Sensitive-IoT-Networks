@@ -59,7 +59,7 @@ def run(episode,
         np.random.seed()
 
         previous_cost = cost(uav, sensors)
-        pass
+
         while True:
             # RL choose action based on observation
             action = RL.choose_action(observation)
@@ -67,14 +67,14 @@ def run(episode,
             # RL take action and get next observation and reward
             done = uav.fly_to(sensors[action]) is False
             _cost = cost(uav, sensors)
-            _observation, reward = observe(
-                uav, sensors), (previous_cost - _cost) * 100
+            _observation = observe(uav, sensors)
+            reward = (previous_cost - _cost) * 100
             previous_cost = _cost
 
             # RL learn from this transition
             RL.store_transition(observation, action, reward, _observation)
 
-            if (step > 200) and (step % 5 == 0):
+            if (step > episode / 5) and (step % 5 == 0):
                 RL.learn()
 
             # swap observation
@@ -83,7 +83,7 @@ def run(episode,
             # break while loop when end of this episode
             if done:
                 costs.append(_cost)
-                if _cost < best_cost:
+                if _cost <= best_cost:
                     best_result = cost(uav, sensors, details=True)
                     best_cost = _cost
                     best_uav = UAV(uav)
@@ -94,14 +94,15 @@ def run(episode,
     print('Max time', params.max_time, 'Final time:', best_uav.records[-1][0])
     print('Best cost:', best_cost)
 
+    RL.plot_cost()
+
     # show costs plot
-    # x, y = list(range(episode)), costs
-    # plt.plot(x, y, color='red')
-    # plt.show()
-    # RL.plot_cost()
+    x, y = list(range(episode)), costs
+    plt.plot(x, y, color='red')
+    plt.show()
 
     # draw(best_uav, sensors, details=True)
-    # draw(best_uav, sensors, details=False)
+    draw(best_uav, sensors, details=False)
     del (RL)
     return best_result
 

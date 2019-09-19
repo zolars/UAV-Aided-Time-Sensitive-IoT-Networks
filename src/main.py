@@ -8,7 +8,9 @@ import datetime
 
 cost = []
 for _ in range(10):
+
     params.sensors_amount += 5
+    params.max_time = params.get_max_time() * params.period
 
     result = {}
     result['greedy'] = greedy.run()
@@ -25,6 +27,8 @@ for _ in range(10):
               "w+") as f:
         f.write(json.dumps(result))
         f.close()
+
+    params.priority_range += 2
 
 with open(
         './out/sensors_amount_{:%m-%d-%H-%M-%S}.json'.format(
