@@ -53,10 +53,8 @@ def run(episode, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
             # RL take action and get next observation and reward
             done = uav.fly_to(sensors[action]) is False
             _cost = cost(uav, sensors)
-            _observation, reward = (
-                str(action) + '_' +
-                # str(uav.records[-1][0] // params.period)
-                observation), (previous_cost - _cost) * 100
+            _observation = (str(action) + '_' + observation)
+            reward = (previous_cost - _cost) * 100
             previous_cost = _cost
 
             # RL learn from this transition
@@ -81,14 +79,12 @@ def run(episode, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
 
     # print('Q_table:\n', RL.q_table)
 
-    x, y = list(range(episode)), costs
-    plt.plot(x, y, color='red')
-    plt.show()
+    # x, y = list(range(episode)), costs
+    # plt.plot(x, y, color='red')
+    # plt.show()
 
     # draw(best_uav, sensors, details=True)
-    draw(best_uav, sensors, details=False)
-
-    del (RL)
+    # draw(best_uav, sensors, details=False)
 
     return best_result
 

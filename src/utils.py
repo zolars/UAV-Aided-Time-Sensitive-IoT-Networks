@@ -33,7 +33,7 @@ def cost(uav, sensors, details=False, output=False):
         epsilon = params.max_time / (params.period * sensor.p) - len(epsilon)
 
         if epsilon != 0:
-            cost += 1 / sensor.p
+            cost += 1 / sensor.p * epsilon
         if output or details:
             console = dict()
             console['x'] = sensor.x
@@ -162,7 +162,7 @@ def generateMap():
     sensors = []
     np.random.seed(params.seed)
     for _ in range(params.sensors_amount):
-        sensor = Sensor()
+        sensor = Sensor(p=_ % params.priority_range)
         sensors.append(sensor)
 
     uav = UAV()

@@ -16,7 +16,7 @@ def run(episode,
         reward_decay=0.9,
         e_greedy=0.9,
         replace_target_iter=200,
-        memory_size=2000):
+        memory_size=5000):
 
     print('------------------Environment------------------')
     print('  length_range:\t\t', params.length_range)
@@ -94,21 +94,21 @@ def run(episode,
     print('Max time', params.max_time, 'Final time:', best_uav.records[-1][0])
     print('Best cost:', best_cost)
 
-    RL.plot_cost()
+    # RL.plot_cost()
 
-    # show costs plot
-    x, y = list(range(episode)), costs
-    plt.plot(x, y, color='red')
-    plt.show()
+    # # show costs plot
+    # x, y = list(range(episode)), costs
+    # plt.plot(x, y, color='red')
+    # plt.show()
 
     # draw(best_uav, sensors, details=True)
-    draw(best_uav, sensors, details=False)
-    del (RL)
+    # draw(best_uav, sensors, details=False)
+
     return best_result
 
 
 if __name__ == "__main__":
-    best_result = run(episode=100)
+    best_result = run(episode=1000)
     with open('./out/DQN_{:%m-%d-%H-%M-%S}.json'.format(params.time),
               "w+") as f:
         f.write(json.dumps(best_result))

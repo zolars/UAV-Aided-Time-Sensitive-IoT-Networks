@@ -1,3 +1,9 @@
+'''
+Usage:
+conda activate UAV
+nohup python ./src/main.py > ./log/main.log $
+'''
+
 import params
 import greedy
 import QL
@@ -9,13 +15,19 @@ import datetime
 cost = []
 for _ in range(10):
 
-    params.sensors_amount += 5
+    # params.sensors_amount += 5
+    params.seed += 5
     params.max_time = params.get_max_time() * params.period
 
     result = {}
     result['greedy'] = greedy.run()
     result['QL'] = QL.run(episode=100)
     result['DQN'] = DQN.run(episode=100)
+
+    # try:
+    #     assert result['greedy']['cost'] > result['DQN']['cost']
+    # except:
+    #     pass
 
     cost.append({
         'greedy': result['greedy']['cost'],
@@ -28,10 +40,10 @@ for _ in range(10):
         f.write(json.dumps(result))
         f.close()
 
-    params.priority_range += 2
+    # params.priority_range += 1
 
 with open(
-        './out/sensors_amount_{:%m-%d-%H-%M-%S}.json'.format(
+        './out/priority_range_{:%m-%d-%H-%M-%S}.json'.format(
             datetime.datetime.now()), "w+") as f:
     f.write(json.dumps(cost))
     f.close()

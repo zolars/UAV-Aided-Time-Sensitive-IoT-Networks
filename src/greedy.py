@@ -46,9 +46,7 @@ def run():
                 epsilon = params.max_time / (params.period *
                                              _sensor.p) - len(epsilon)
                 if epsilon != 0:
-                    _c += epsilon * 1 / _sensor.p * (
-                        epsilon / (params.max_time /
-                                   (params.period * _sensor.p)))
+                    _c += epsilon * 1 / _sensor.p
 
             # _c = cost(uav, sensors)
 
@@ -67,12 +65,13 @@ def run():
     print('Best cost:', best_cost)
 
     # draw(uav, sensors, details=True)
-    draw(uav, sensors, details=False)
+    # draw(uav, sensors, details=False)
 
     return cost(uav, sensors, details=True)
 
 
 if __name__ == "__main__":
+    params.sensors_amount = 5
     best_result = run()
     with open('./out/Greedy_{:%m-%d-%H-%M-%S}.json'.format(params.time),
               "w+") as f:
