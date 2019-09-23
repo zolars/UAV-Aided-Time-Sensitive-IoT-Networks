@@ -13,15 +13,15 @@ import json
 import datetime
 
 cost = []
-for _ in range(10):
+for _ in range(5):
 
     # params.sensors_amount += 5
-    params.seed += 5
+    # params.seed += 5
     params.max_time = params.get_max_time() * params.period
 
     result = {}
     result['greedy'] = greedy.run()
-    result['QL'] = QL.run(episode=100)
+    result['QL'] = QL.run(episode=1)
     result['DQN'] = DQN.run(episode=100)
 
     # try:
@@ -40,7 +40,7 @@ for _ in range(10):
         f.write(json.dumps(result))
         f.close()
 
-    # params.priority_range += 1
+    params.priority_range += 1
 
 with open(
         './out/priority_range_{:%m-%d-%H-%M-%S}.json'.format(

@@ -26,14 +26,22 @@ def observe(uav, sensors):
 def cost(uav, sensors, details=False, output=False):
     sensors_result = []
     cost = 0
+    cost_special = 0
     for sensor in sensors:
         epsilon = set()
+        epsilon_special = set()
         for record in sensor.records:
+            if (record < 3600):
+                epsilon_special.add(record // (params.period * sensor.p))
             epsilon.add(record // (params.period * sensor.p))
         epsilon = params.max_time / (params.period * sensor.p) - len(epsilon)
+        epsilon_special = 3600 / (params.period *
+                                  sensor.p) - len(epsilon_special)
 
         if epsilon != 0:
             cost += 1 / sensor.p * epsilon
+        if epsilon_special != 0:
+            cost_special += 1 / sensor.p * epsilon_special
         if output or details:
             console = dict()
             console['x'] = sensor.x
@@ -60,6 +68,7 @@ def cost(uav, sensors, details=False, output=False):
             'seed': params.seed,
         },
         'cost': cost,
+        'cost_special': cost_special,
         'uav_result': uav.records,
         'sensors_result': sensors_result
     }
@@ -162,7 +171,8 @@ def generateMap():
     sensors = []
     np.random.seed(params.seed)
     for _ in range(params.sensors_amount):
-        sensor = Sensor(p=_ % params.priority_range)
+        sensor = Sensor()
+        # sensor = Sensor(p=_ % params.priority_range)
         sensors.append(sensor)
 
     uav = UAV()

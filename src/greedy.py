@@ -54,7 +54,10 @@ def run():
                 c = _c
                 target_sensor_id = sensors.index(sensor)
 
-            sensor.records.pop()
+            try:
+                sensor.records.pop()
+            except:
+                pass
 
             del _uav
 
