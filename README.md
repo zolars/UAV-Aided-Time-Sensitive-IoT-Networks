@@ -6,7 +6,7 @@ Some path schedule solutions specifically for UAV-sensorTime-sensitive Network. 
 
 <img src='./archive/once.png'>
 
-<img src='./archive/all.png'>
+<img src='./archive/all.jpg'>
 
 <img src='./archive/cost.png'>
 
