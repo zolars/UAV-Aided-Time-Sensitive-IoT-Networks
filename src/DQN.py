@@ -101,15 +101,16 @@ def run(episode,
     # plt.plot(x, y, color='red')
     # plt.show()
 
-    # draw(best_uav, sensors, details=True)
-    # draw(best_uav, sensors, details=False)
+    with open('./out/DQN_{:%m-%d-%H-%M-%S}.json'.format(params.time),
+              "w+") as f:
+        f.write(json.dumps(best_result))
+        f.close()
+
+    draw(best_uav, sensors, details=True)
+    draw(best_uav, sensors, details=False)
 
     return best_result
 
 
 if __name__ == "__main__":
-    best_result = run(episode=1000)
-    with open('./out/DQN_{:%m-%d-%H-%M-%S}.json'.format(params.time),
-              "w+") as f:
-        f.write(json.dumps(best_result))
-        f.close()
+    best_result = run(episode=100)

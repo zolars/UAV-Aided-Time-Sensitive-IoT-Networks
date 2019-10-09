@@ -2,11 +2,13 @@
 
 ## Description
 
-Some path schedule solutions specifically for UAV-sensorTime-sensitive Network. The code is used to evaluate the models' performance and time complexity.
+Some path schedule solutions specifically for UAV-sensorTime-sensitive Network. The code is used to evaluate the models' performance and time complexity with three different algorithms. Especially, establishing the DQN solving.
 
-<img src='./archive/DQN/09-16-22-29-15_cost.png'>
+<img src='./archive/once.png'>
 
-<img src='./archive/DQN/09-16-22-29-15_DN.png'>
+<img src='./archive/all.png'>
+
+<img src='./archive/cost.png'>
 
 ## Parameters
 
