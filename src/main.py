@@ -21,7 +21,7 @@ for _ in range(5):
 
     result = {}
     result['greedy'] = greedy.run()
-    result['QL'] = QL.run(episode=1)
+    result['QL'] = QL.run(episode=100)
     result['DQN'] = DQN.run(episode=100)
 
     # try:

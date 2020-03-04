@@ -164,7 +164,7 @@ def draw(uav, sensors, details=False):
         fig.savefig('./out/{:%m-%d-%H-%M-%S}_{}.png'.format(params.time, tour))
     else:
         fig.savefig('./out/{:%m-%d-%H-%M-%S}.png'.format(params.time))
-        plt.show()
+        # plt.show()
 
 
 def generateMap():

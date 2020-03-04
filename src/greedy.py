@@ -74,7 +74,6 @@ def run():
 
 
 if __name__ == "__main__":
-    params.sensors_amount = 5
     best_result = run()
     with open('./out/Greedy_{:%m-%d-%H-%M-%S}.json'.format(params.time),
               "w+") as f:

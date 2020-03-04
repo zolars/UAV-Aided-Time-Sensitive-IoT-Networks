@@ -128,4 +128,4 @@ for generation in range(N_GENERATIONS):
     env.plotting(lx, ly)
 
 plt.ioff()
-plt.show()
+# plt.show()

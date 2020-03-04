@@ -6,9 +6,8 @@ dependencies:
   - numpy
   - pandas
   - tqdm
-  - pytorch
   - keras
   - tensorflow
   - pip:
-    - gym
-    - pillow
+      - gym
+      - pillow
