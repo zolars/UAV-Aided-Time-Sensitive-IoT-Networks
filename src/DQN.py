@@ -106,7 +106,7 @@ def run(episode,
         f.write(json.dumps(best_result))
         f.close()
 
-    draw(best_uav, sensors, details=True)
+    # draw(best_uav, sensors, details=True)
     draw(best_uav, sensors, details=False)
 
     return best_result

@@ -36,4 +36,4 @@ period = 300
 t_limit = 450
 max_time = get_max_time() * period
 
-seed = 5
+seed = 55

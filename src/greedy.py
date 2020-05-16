@@ -68,7 +68,7 @@ def run():
     print('Best cost:', best_cost)
 
     # draw(uav, sensors, details=True)
-    # draw(uav, sensors, details=False)
+    draw(uav, sensors, details=False)
 
     return cost(uav, sensors, details=True)
 

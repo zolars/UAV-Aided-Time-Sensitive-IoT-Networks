@@ -84,7 +84,7 @@ def run(episode, learning_rate=0.01, reward_decay=0.9, e_greedy=0.9):
     # plt.show()
 
     # draw(best_uav, sensors, details=True)
-    # draw(best_uav, sensors, details=False)
+    draw(best_uav, sensors, details=False)
 
     return best_result
 

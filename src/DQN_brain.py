@@ -83,7 +83,7 @@ class DeepQNetwork:
         # ------------------ build evaluate_net ------------------
         with tf.compat.v1.variable_scope('eval_net'):
             e1 = tf.compat.v1.layers.dense(self.s,
-                                           20,
+                                           self.n_actions,
                                            tf.nn.relu,
                                            kernel_initializer=w_initializer,
                                            bias_initializer=b_initializer,
@@ -98,7 +98,7 @@ class DeepQNetwork:
         # ------------------ build target_net ------------------
         with tf.compat.v1.variable_scope('target_net'):
             t1 = tf.compat.v1.layers.dense(self.s_,
-                                           20,
+                                           self.n_actions,
                                            tf.nn.relu,
                                            kernel_initializer=w_initializer,
                                            bias_initializer=b_initializer,
